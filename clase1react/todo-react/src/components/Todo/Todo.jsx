@@ -1,11 +1,13 @@
 import React, { useRef, useState } from "react";
+import {
+  completeTodoAction,
+  deleteTodoAction,
+  editTodoAction,
+} from "./../../state/actions/todoActions";
+import { connect } from "react-redux";
 import "./Todo.css";
 
 const Todo = ({ todo, completeTodo, editTodo, deleteTodo }) => {
-  const completeTodoHanlder = (ev) => {
-    completeTodo(todo.id);
-  };
-
   const [disabledInput, setDisableInput] = useState(true);
   const [inputValue, setInputValue] = useState(todo.title);
 
@@ -13,6 +15,10 @@ const Todo = ({ todo, completeTodo, editTodo, deleteTodo }) => {
 
   const enableEdit = () => {
     setDisableInput(false);
+  };
+
+  const completeTodoHanlder = (ev) => {
+    completeTodo(todo.id);
   };
 
   const updateTodo = (ev) => {
@@ -65,4 +71,12 @@ const Todo = ({ todo, completeTodo, editTodo, deleteTodo }) => {
   );
 };
 
-export default Todo;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    completeTodo: (id) => dispatch(completeTodoAction(id)),
+    deleteTodo: (id) => dispatch(deleteTodoAction(id)),
+    editTodo: (id, title) => dispatch(editTodoAction(id, title)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Todo);
